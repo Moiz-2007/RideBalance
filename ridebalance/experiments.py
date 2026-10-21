@@ -1,4 +1,9 @@
-"""Repeated runs, scenario sweeps and the statistics on top of them."""
+"""REPEATED EXPERIMENTS: compute MEAN AND CONFIDENCE INTERVAL, and optionally run a SCENARIO SWEEP.
+MEAN AND STANDARD DEVIATION
+HYPOTHESIS TESTING
+95% CONFIDENCE INTERVAL
+, scenario sweeps and the statistics on top of them."""
+
 from __future__ import annotations
 
 from dataclasses import replace

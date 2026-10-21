@@ -1,5 +1,7 @@
 """Probability model used by RideBalance (and by the app's shortage-risk display).
 
+POISSON DISTRIBUTION WITH LOG-NORMAL DISTRIBUTION AND MONTE-CARLO DISTRIBUTION
+
 ASSUMPTION (not validated on real data): demand D_z for one decision window is
 a Poisson count whose mean is the forecast multiplied by a log-normal factor
 with mean 1 and spread `sigma`. With sigma = 0 it reduces to a plain Poisson.
