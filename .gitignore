@@ -13,3 +13,6 @@ build/
 *.egg-info/
 
 .env
+
+web/node_modules/
+web/dist/
