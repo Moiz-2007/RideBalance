@@ -3,6 +3,7 @@ import {
   BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 import { EmptyState, Spinner, SectionHeading, Note, StatRow } from '../components/ui';
+import { BatchCIChart } from '../components/AnalyticalCharts';
 import type { SimulationResult } from '../types';
 import { STRATEGY_COLORS, STRATEGY_LABELS } from '../types';
 
@@ -174,6 +175,9 @@ export default function ResultsPage({ result, loading }: ResultsPageProps) {
           </ResponsiveContainer>
         </div>
       </div>
+
+      {/* Uncertainty Intervals (when batch available) */}
+      <BatchCIChart result={result} metricKey="service_rate" metricLabel="Service Rate" />
 
       {/* Trade-off analysis */}
       {pServiceRate !== null && b0ServiceRate !== null && (

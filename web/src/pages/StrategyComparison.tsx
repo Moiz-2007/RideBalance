@@ -3,6 +3,7 @@ import {
   BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 import { EmptyState, Spinner, Tabs, Note, SectionHeading } from '../components/ui';
+import { ServiceWaitComparison, EmptyTravelCostChart } from '../components/AnalyticalCharts';
 import type { SimulationResult } from '../types';
 import { STRATEGY_COLORS, STRATEGY_LABELS } from '../types';
 
@@ -59,7 +60,7 @@ export default function StrategyComparison({ result, loading }: StrategyComparis
       const row = result.summary.find(r => r.strategy === s && r.metric === metric);
       if (row) return row.mean;
     }
-    return (result.strategies[s].metrics[metric] as number) ?? null;
+    return (result.strategies[s]?.metrics[metric] as number) ?? null;
   };
 
   const findBest = (metric: string, higherBetter: boolean | null): string | null => {
@@ -92,7 +93,7 @@ export default function StrategyComparison({ result, loading }: StrategyComparis
 
       <Tabs
         tabs={[
-          { id: 'charts', label: 'Charts' },
+          { id: 'charts', label: 'Analytical Charts' },
           { id: 'table', label: 'Comparison Table' },
         ]}
         active={activeTab}
@@ -100,52 +101,66 @@ export default function StrategyComparison({ result, loading }: StrategyComparis
       />
 
       {activeTab === 'charts' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {CHART_METRICS.map(cm => {
-            const chartData = strategies.map(s => ({
-              strategy: s,
-              label: s,
-              value: (() => {
-                const v = getVal(s, cm.key);
-                return v !== null ? cm.scale(v) : null;
-              })(),
-            })).filter(d => d.value !== null);
+        <div className="flex flex-col gap-6">
+          {/* Chart 3: Service Rate & Average Wait Across Strategies */}
+          <ServiceWaitComparison result={result} />
 
-            return (
-              <div key={cm.key} className="card p-4">
-                <SectionHeading>{cm.label}</SectionHeading>
-                <ResponsiveContainer width="100%" height={220}>
-                  <BarChart data={chartData} margin={{ top: 8, right: 16, left: 16, bottom: 8 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#2a3347" />
-                    <XAxis dataKey="label" tick={{ fill: '#8892a4', fontSize: 11 }} />
-                    <YAxis tick={{ fill: '#8892a4', fontSize: 11 }} tickFormatter={cm.tickFmt} />
-                    <Tooltip
-                      contentStyle={{ backgroundColor: '#161b25', border: '1px solid #2a3347', borderRadius: 6 }}
-                      formatter={(v: any, _name: any) => [cm.tickFmt(Number(v ?? 0)), cm.label]}
-                      labelFormatter={(label) => STRATEGY_LABELS[label as string] ?? label}
-                    />
-                    <Bar dataKey="value" radius={[3, 3, 0, 0]}>
-                      {chartData.map(d => (
-                        <Cell
-                          key={d.strategy}
-                          fill={STRATEGY_COLORS[d.strategy] ?? '#64748b'}
+          {/* Chart 4: Empty Travel Distance & Repositioning Cost */}
+          <EmptyTravelCostChart result={result} />
+
+          {/* Individual Metric Cards */}
+          <div>
+            <SectionHeading sub="Focused comparison for each primary outcome metric">
+              Individual Metric Breakdowns
+            </SectionHeading>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {CHART_METRICS.map(cm => {
+                const chartData = strategies.map(s => ({
+                  strategy: s,
+                  label: s,
+                  value: (() => {
+                    const v = getVal(s, cm.key);
+                    return v !== null ? cm.scale(v) : null;
+                  })(),
+                })).filter(d => d.value !== null);
+
+                return (
+                  <div key={cm.key} className="card p-4">
+                    <SectionHeading>{cm.label}</SectionHeading>
+                    <ResponsiveContainer width="100%" height={220}>
+                      <BarChart data={chartData} margin={{ top: 8, right: 16, left: 16, bottom: 8 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#2a3347" />
+                        <XAxis dataKey="label" tick={{ fill: '#8892a4', fontSize: 11 }} />
+                        <YAxis tick={{ fill: '#8892a4', fontSize: 11 }} tickFormatter={cm.tickFmt} />
+                        <Tooltip
+                          contentStyle={{ backgroundColor: '#161b25', border: '1px solid #2a3347', borderRadius: 6 }}
+                          formatter={(v: any, _name: any) => [cm.tickFmt(Number(v ?? 0)), cm.label]}
+                          labelFormatter={(label) => STRATEGY_LABELS[label as string] ?? label}
                         />
+                        <Bar dataKey="value" radius={[3, 3, 0, 0]}>
+                          {chartData.map(d => (
+                            <Cell
+                              key={d.strategy}
+                              fill={STRATEGY_COLORS[d.strategy] ?? '#64748b'}
+                            />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                    <div className="flex flex-wrap gap-3 justify-center mt-1">
+                      {chartData.map(d => (
+                        <div key={d.strategy} className="flex items-center gap-1.5 text-xs text-text-secondary">
+                          <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: STRATEGY_COLORS[d.strategy] ?? '#64748b' }} />
+                          {STRATEGY_LABELS[d.strategy] ?? d.strategy}:{' '}
+                          <span className="font-mono text-text-primary">{cm.tickFmt(d.value!)}</span>
+                        </div>
                       ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-                <div className="flex flex-wrap gap-3 justify-center mt-1">
-                  {chartData.map(d => (
-                    <div key={d.strategy} className="flex items-center gap-1.5 text-xs text-text-secondary">
-                      <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: STRATEGY_COLORS[d.strategy] ?? '#64748b' }} />
-                      {STRATEGY_LABELS[d.strategy] ?? d.strategy}:{' '}
-                      <span className="font-mono text-text-primary">{cm.tickFmt(d.value!)}</span>
                     </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
 

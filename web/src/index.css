@@ -136,4 +136,51 @@ html, body {
 /* Leaflet & Recharts */
 .recharts-cartesian-axis-tick-value { fill: #8892a4 !important; font-size: 11px; }
 .recharts-legend-item-text { color: #8892a4 !important; font-size: 12px; }
-.leaflet-container { background: #0f1117; }
+.leaflet-container { background: #0f1117; font-family: inherit; }
+
+/* Leaflet Dark Theme Overrides */
+.leaflet-tooltip.zone-tooltip-transparent {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #fff !important;
+  padding: 0 !important;
+}
+.leaflet-tooltip.zone-tooltip-transparent::before {
+  display: none !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: #161b25 !important;
+  color: #e8ecf4 !important;
+  border: 1px solid #2a3347 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+.leaflet-popup-tip {
+  background-color: #161b25 !important;
+}
+.leaflet-popup-close-button {
+  color: #8892a4 !important;
+}
+.leaflet-popup-close-button:hover {
+  color: #ffffff !important;
+}
+
+.leaflet-bar {
+  border: 1px solid #2a3347 !important;
+  box-shadow: none !important;
+}
+.leaflet-bar a {
+  background-color: #161b25 !important;
+  color: #e8ecf4 !important;
+  border-bottom: 1px solid #2a3347 !important;
+}
+.leaflet-bar a:hover {
+  background-color: #1e2535 !important;
+  color: #10b981 !important;
+}
+.leaflet-bar a.leaflet-disabled {
+  background-color: #0f1117 !important;
+  color: #4d5a70 !important;
+}
