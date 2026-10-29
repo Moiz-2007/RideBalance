@@ -150,3 +150,40 @@ Tested by the included tests (all pass in the authoring environment): demand gen
 scenario overlap, driver accounting every minute, in-transit tracking, movement feasibility, hand-computed metrics, strategy
 differences, en-route supply handling, statistics helpers.
 The Streamlit UI could not be run in the authoring sandbox (no network to install Streamlit/Plotly); see the notes delivered with this project.
+
+
+## Web Application (React + TypeScript + FastAPI)
+
+In addition to the Streamlit app, a full-stack, production-grade web dashboard is included:
+
+- **Frontend**: React 19 + TypeScript + Vite + Tailwind CSS + Recharts + Leaflet + Lucide Icons.
+- **Backend**: Python FastAPI (`api.py`), directly wrapping and executing the exact simulation modules (`ridebalance/`).
+- **Pages**:
+  1. **Overview**: KPI metrics, strategy comparison bar chart, demand vs supply analysis, run summary.
+  2. **City & Zones**: Interactive 4×4 grid (Z00–Z15), colored by predicted demand, shortage risk, idle drivers, incoming en-route drivers, or effective supply; animated repositioning arrows and zone inspector.
+  3. **Strategy Comparison**: Bar charts and comparison table comparing B0, B1, B2, and RideBalance (P).
+  4. **Statistics**: Multi-run analysis with 95% confidence intervals, error-bar charts, paired tests (t-test / Wilcoxon), Holm adjustment, and Cohen's $d_z$ effect sizes.
+  5. **Scenario Lab**: Scenario sweep across all 5 events + combined scenarios, comparing strategy robustness.
+  6. **Results & Interpretation**: Data-driven breakdown of best performers, trade-offs, and simulation limitations.
+  7. **Method & Assumptions**: Detailed documentation of mathematical foundations, arrival probabilities, and decision rules.
+
+### Running the Web Version
+
+1. **Option A: One-click script (PowerShell)**
+   ```powershell
+   .\run_web.ps1
+   ```
+
+2. **Option B: Manual start**
+   - Terminal 1 (FastAPI backend):
+     ```bash
+     python -m uvicorn api:app --host 0.0.0.0 --port 8000
+     ```
+   - Terminal 2 (React Vite frontend):
+     ```bash
+     cd web
+     npm run dev
+     ```
+
+3. Open **`http://localhost:5173`** in your browser.
+   - Interactive API documentation is available at **`http://localhost:8000/docs`**.
