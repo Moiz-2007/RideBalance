@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-surface text-text-primary;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track { background: #0f1117; }
+  ::-webkit-scrollbar-thumb { background: #2a3347; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a4560; }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface-100 border border-border rounded-lg;
+  }
+  .card-sm {
+    @apply bg-surface-100 border border-border rounded;
+  }
+  .btn-primary {
+    @apply bg-accent hover:bg-accent-dark text-white font-medium px-4 py-2 rounded transition-colors duration-150 flex items-center gap-2 text-sm;
+  }
+  .btn-secondary {
+    @apply bg-surface-200 hover:bg-surface-300 text-text-primary border border-border font-medium px-4 py-2 rounded transition-colors duration-150 flex items-center gap-2 text-sm;
+  }
+  .btn-ghost {
+    @apply hover:bg-surface-200 text-text-secondary hover:text-text-primary px-3 py-1.5 rounded transition-colors duration-150 flex items-center gap-1.5 text-sm;
+  }
+  .label {
+    @apply text-xs font-medium text-text-secondary uppercase tracking-wider;
+  }
+  .metric-value {
+    @apply text-2xl font-bold text-text-primary font-mono;
+  }
+  .metric-label {
+    @apply text-xs text-text-secondary;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
+  }
+  .badge-B0 { @apply bg-slate-800 text-slate-300; }
+  .badge-B1 { @apply bg-amber-900/40 text-amber-400; }
+  .badge-B2 { @apply bg-blue-900/40 text-blue-400; }
+  .badge-P  { @apply bg-emerald-900/40 text-emerald-400; }
+
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2 rounded text-sm text-text-secondary hover:text-text-primary hover:bg-surface-200 transition-colors duration-150 cursor-pointer;
+  }
+  .nav-item-active {
+    @apply text-accent bg-emerald-950/50 border-l-2 border-accent;
+  }
+
+  .recharts-wrapper { font-family: 'Inter', sans-serif; }
+  .recharts-cartesian-axis-tick-value { fill: #8892a4; font-size: 11px; }
+  .recharts-legend-item-text { color: #8892a4 !important; font-size: 12px; }
+
+  /* Leaflet overrides for dark theme */
+  .leaflet-container { background: #0f1117; }
+  .leaflet-tile { filter: brightness(0.85) saturate(0.6); }
+}
